@@ -1,0 +1,87 @@
+#define ll long long
+class Solution {
+public:
+    
+    long long min(long long a,long long b)
+    {
+        if(a<b)return a;
+        return b;
+    }
+    vector<long long> findDists(ll n,vector<vector<pair<ll,ll> > >&graph,int dest)
+    {
+         
+        priority_queue<pair<long long,long long> >pq;
+        pq.push({0,dest});
+        vector<long long>dists(n,LONG_MAX/2);
+        dists[dest]=0;
+        
+        while(pq.size())
+        {
+            ll dist=pq.top().first;
+            ll node=pq.top().second;
+            pq.pop();
+           
+            for(auto &x:graph[node])
+            {
+                //x.first x.second
+                
+                if(dists[x.first]>x.second+dists[node])
+                {
+                    dists[x.first]=x.second+dists[node];
+                    pq.push({dists[x.first],x.first});
+                }
+                
+            }
+            
+        }
+        
+       
+        return dists;
+        
+    }
+    long long minimumWeight(ll n, vector<vector<int>>& edges, int src1, int src2, int dest)
+    {
+        vector<vector<pair<ll,ll>>>graph(n),graph1(n);
+         map<pair<int,int>,int>mp;
+        for(int i=0;i<edges.size();i++)
+        {
+            if(mp.find({edges[i][0],edges[i][1]})==mp.end())
+            {
+                mp[{edges[i][0],edges[i][1]}]=edges[i][2];
+                continue;
+            }
+           mp[{edges[i][0],edges[i][1]}]=min(mp[{edges[i][0],edges[i][1]}],edges[i][2]);
+        }
+        
+       for(auto &vec:mp)
+       {
+           
+         graph[vec.first.second].push_back({vec.first.first,vec.second});  
+         graph1[vec.first.first].push_back({vec.first.second,vec.second}); 
+       }
+        
+       vector<ll>dists1=findDists(n,graph,dest);
+       
+       vector<ll>dists2=findDists(n,graph1,src2);
+      
+          vector<ll>dists3=findDists(n,graph1,src1);
+          long long cost=dists1[src1]+dists1[src2];
+       
+         
+        for(int i=0;i<n;i++)
+        {
+            long long t=dists1[i];
+             if(t>=LONG_MAX/2)continue;
+            t+=dists2[i];
+            if(t>=LONG_MAX/2)continue;
+            t+=dists3[i];
+            if(t>=LONG_MAX/2)continue;
+            cost=min(cost,t);  
+            
+        }
+        
+     
+        if(cost>=LONG_MAX/2)cost=-1;
+        return cost;
+    }
+};
