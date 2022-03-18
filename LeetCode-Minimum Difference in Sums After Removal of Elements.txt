@@ -1,0 +1,62 @@
+#define ll long long
+class Solution {
+public:
+    long long minimumDifference(vector<int>& nums) 
+    {
+     map<int,ll>mp;
+     priority_queue<ll>pq;
+     ll sum=0;
+     int n=nums.size()/3;
+     for(int i=0;i<n;i++)
+     {
+         sum+=nums[i];
+         pq.push(nums[i]);
+     }
+     for(int i=0;i<=n;i++)
+     {
+         if(i==0)
+         {
+             mp[i]=sum;
+         }
+         else
+         {
+            pq.push(nums[i+n-1]);
+            sum+=nums[i+n-1];
+            sum-=pq.top();
+             pq.pop();
+             mp[i]=sum;
+         }
+     }
+     sum=0;
+        priority_queue<ll,vector<ll>,greater<ll> >mpq;
+        
+        for(int i=2*n;i<nums.size();i++)
+        {
+            mpq.push(nums[i]);
+            sum+=nums[i];
+        }
+        
+        for(int i=0;i<=n;i++)
+        {
+            if(i==0)
+            {
+                mp[n-i]-=sum;
+            }
+            else
+            {
+                mpq.push(nums[2*n-i]);
+                sum+=nums[2*n-i];
+                sum-=mpq.top();
+                mpq.pop();
+                mp[n-i]-=sum;
+            }
+        }
+        
+      long long ans = LONG_MAX;
+        for(auto &t:mp)
+        {
+            ans=min(ans,t.second);
+        }
+        return ans;
+    }
+};
