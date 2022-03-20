@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int numberOfArrays(vector<int>& di, int lower, int upper)
+    {
+        long long sum=0;
+        
+        vector<long long>d;
+        for(auto &x:di)d.push_back(x);
+       long long maxi=d[0];
+        long long mini=d[0];
+        for(int i=1;i<d.size();i++)
+        {
+            d[i]+=d[i-1];
+            if(maxi<d[i])maxi=d[i];
+            if(mini>d[i])mini=d[i];
+          
+        }
+        
+        int count=0;
+        for(int i=lower;i<=upper;i++)
+        {
+          if((i+maxi)>=lower&&(i+maxi)<=upper&&(i+mini)>=lower&&(i+mini)<=upper)count++;
+        }
+        return count;
+    }
+};
