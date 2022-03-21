@@ -1,0 +1,50 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> nodesBetweenCriticalPoints(ListNode* head) 
+    {
+       int maxi=-1;
+       int mini=-1;
+       int first=-1;
+       int previous=-1;
+       
+        ListNode*pre=head;
+        head=head->next;
+        int dis=1;
+        while(head)
+        {
+            //cout<<head->val<<" "<<first<<" "<<dis<<" "<<previous<<" "<<mini<<endl;
+            if(head->next==NULL)break;
+            if(head->val>pre->val&&head->val>head->next->val||head->val<pre->val&&head->val<head->next->val)
+            {
+               
+                if(first==-1)first=dis;
+                
+                if(previous==-1)previous=dis;
+                else {
+                    if(mini==-1)mini=dis-previous;
+                     mini=min(mini,(dis-previous));
+                }
+                
+                previous=dis;
+    
+            }
+            pre=head;
+            head=head->next;
+            dis++;
+        }
+        maxi=previous-first;
+        if(maxi==0)maxi=-1;
+        if(mini==0)mini=-1;
+        return {mini,maxi};
+    }
+};
