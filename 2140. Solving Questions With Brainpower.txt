@@ -1,0 +1,19 @@
+class Solution {
+    
+  
+public:
+    vector<long long>dp;
+    long long mostPoint(vector<vector<int>>& que,int index) 
+    {
+        if(index>=que.size())return 0;
+        
+        if(dp[index]!=-1)return dp[index];
+        
+        return dp[index]=max(que[index][0]+mostPoint(que,index+que[index][1]+1),mostPoint(que,index+1));
+    }
+    long long mostPoints(vector<vector<int>>& que) 
+    {
+         dp.resize(100010,-1);
+        return mostPoint(que,0);
+    }
+};
