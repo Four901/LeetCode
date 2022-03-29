@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int minSetSize(vector<int>& arr)
+    {
+        sort(arr.begin(),arr.end());
+        vector<pair<int,int>>vecs;
+        for(int i=0;i<arr.size();)
+        {
+            int count=0;
+            int num=arr[i];
+            while(i<arr.size())
+            {
+                if(arr[i]!=num)break;
+                count++;
+                i++;
+            }
+            vecs.push_back({count,num});
+        }
+        sort(vecs.rbegin(),vecs.rend());
+        
+        int count=0;
+        int size=0;
+        
+       
+        
+        
+        for(int i=0;i<vecs.size();i++)
+        {
+            
+            if(size*2>=arr.size())break;
+            
+            size+=vecs[i].first;
+            count++;      
+        }
+        return count;
+    }
+};

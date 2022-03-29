@@ -1,0 +1,29 @@
+#define mod 1000000007
+class Solution {
+public:
+    vector<vector<int>>dp;
+    int okk(int index,int n,int Predice,vector<int>& rollMax)
+    {
+        if(index>=n)return 1;
+    
+            if(dp[index][Predice]!=-1)return dp[index][Predice];
+        
+        int ans=0;
+        for(int i=1;i<=6;i++)
+        {
+            if(i==Predice)continue;
+            
+            for(int j=1;j<=rollMax[i-1];j++)
+            {
+                if(index+j>n)break;
+                ans=(ans+okk(index+j,n,i,rollMax))%mod;
+            }
+        }
+        return dp[index][Predice]=ans;
+    }
+    int dieSimulator(int n, vector<int>& rollMax)
+    {
+        dp.resize(n+1,vector<int>(7,-1));
+        return okk(0,n,0,rollMax);
+    }
+};

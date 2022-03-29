@@ -1,0 +1,37 @@
+class Solution {
+public:
+    long long maxPoints(vector<vector<int>>& p) 
+    {
+        vector<long long>pre;
+        for(auto&x:p[0])pre.push_back(x);
+        
+        for(int j=0;j<p.size()-1;j++)
+        {
+            vector<long long>left(p[0].size(),-1);
+            vector<long long>rght(p[0].size(),-1);
+            left[0]=pre[0];
+            rght[p[0].size()-1]=pre[p[0].size()-1];
+            
+            for(int i=1;i<p[0].size();i++)
+            {
+                left[i]=max(left[i-1]-1,pre[i]);
+            }
+            for(int i=p[0].size()-2;i>=0;i--)
+            {
+                rght[i]=max(rght[i+1]-1,pre[i]);
+            }
+            
+            for(int i=0;i<p[0].size();i++)
+            {
+                pre[i]=p[j+1][i]+max(left[i],rght[i]);
+            }
+        }
+        long long maxi=pre[0];
+        for(int i=0;i<pre.size();i++)
+        {
+            if(maxi<pre[i])maxi=pre[i];
+        }
+        return maxi;
+        
+    }
+};

@@ -1,0 +1,49 @@
+#define mod 1000000007
+class Solution {
+public:
+    int okk(int n,int index,int pre,vector<vector<int>>&dp)
+    {
+        if(index>=n)return 1;
+        if(dp[index][pre]!=-1)return dp[index][pre];
+        
+        int ans=0;
+        
+        if(index==0)
+        {
+          for(int i=0;i<5;i++) ans=(ans+okk(n,index+1,i,dp))%mod;
+            return ans;
+        }
+      if(pre==0)
+      {
+          ans=(ans+okk(n,index+1,1,dp))%mod;
+      }
+      else if(pre==1)
+      {
+          ans=(ans+okk(n,index+1,0,dp))%mod;
+          ans=(ans+okk(n,index+1,2,dp))%mod;
+      }
+      else if(pre==2)
+      {
+          for(int i=0;i<5;i++){
+              if(i==2)continue;
+              ans=(ans+okk(n,index+1,i,dp))%mod;
+          } 
+            return ans;
+      }
+      else if(pre==3)
+      {
+          ans=(ans+okk(n,index+1,2,dp))%mod;
+          ans=(ans+okk(n,index+1,4,dp))%mod;
+      }
+        else
+        {
+             ans=(ans+okk(n,index+1,0,dp))%mod;
+        }
+        return dp[index][pre]=ans;
+    }
+    int countVowelPermutation(int n) 
+    {
+       vector<vector<int>>dp(n+1,vector<int>(8,-1));
+       return okk(n,0,0,dp);
+    }
+};

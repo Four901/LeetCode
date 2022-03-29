@@ -1,0 +1,79 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+#define ll long long
+class Solution {
+public:
+ll max(ll a,ll b)
+{
+    if(a>b)return a;
+    return b;
+}
+    ll min(ll a,ll b)
+    {
+        if(a<b)return a;
+        return b;
+    }
+    map<TreeNode*,vector<ll> >mp;
+    vector<ll> okk(TreeNode*root,ll&ans)
+    {
+        if(root==NULL)return {0,INT_MAX,INT_MIN};
+      //  cout<<root->val<<endl;
+        if(mp.find(root)!=mp.end())return mp[root];
+        if(!root->left&&!root->right){ans=max(ans,root->val); return  mp[root]={root->val,root->val,root->val};}
+        
+        if(root->left&&root->right)
+        {
+              vector<ll>vec1=okk(root->left,ans);
+              vector<ll>vec2=okk(root->right,ans);
+            if(root->val>vec1[2]&&root->val<vec2[1])
+            {
+             
+                 ans=max(ans,vec1[0]+vec2[0]+root->val);
+                
+                return  mp[root]= {vec1[0]+vec2[0]+root->val,min(vec1[1],root->val),max(root->val,vec2[2])};
+            }
+        }
+        else if(root->right&&!root->left)
+        {
+            // vector<int>vec1=okk(root->left,ans);
+             vector<ll>vec2=okk(root->right,ans);
+            if(root->val<vec2[1])
+            {
+             
+                 ans=max(ans,vec2[0]+root->val);
+                
+                return  mp[root]={vec2[0]+root->val,root->val,max(root->val,vec2[2])};
+            }
+        }
+        else if(root->left&&!root->right)
+        {
+            vector<ll>vec1=okk(root->left,ans);
+           //  vector<int>vec2=okk(root->right,ans);
+            if(root->val>vec1[2])
+            {
+             
+                 ans=max(ans,vec1[0]+root->val);
+                
+                return  mp[root]={vec1[0]+root->val,min(vec1[1],root->val),root->val};
+            }
+        }
+             vector<ll>vec1=okk(root->left,ans);
+             vector<ll>vec2=okk(root->right,ans);
+        return  mp[root]={INT_MIN,INT_MAX,INT_MIN};
+    }
+    ll maxSumBST(TreeNode* root) 
+    {
+        ll ans=0;
+        okk(root,ans);
+        return ans;
+    }
+};
